@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd 
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import mean_squared_error, r2_score # These are metrics from sklearn.metrics to evaluate the performance of the regression model.
 
 # Load Boston housing dataset
 data = pd.read_csv('data4.csv')
@@ -30,7 +30,7 @@ print(f'Intercept: {model.intercept_}')
 print(f'Coefficient: {model.coef_[0]}') 
 print(f'Mean Squared Error: {mse}')
 print(f'Root Mean Squared Error (RMSE): {rmse}')
-print(f'R-Squared Score (R²): {r2}')
+print(f'R-Squared Score (RÂ²): {r2}')
 
 
 # User input for price and predicting area
