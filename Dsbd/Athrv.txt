@@ -1,0 +1,521 @@
+=========================================DW1======================================
+import pandas as pd
+import numpy as np
+df = pd.read_csv("/content/IRIS.csv")
+df.head()
+
+df.dtypes
+
+from sklearn import preprocessing
+min_max_scaler = preprocessing.MinMaxScaler()
+
+x = df.iloc[:,:4]
+
+x
+
+x_scaled = min_max_scaler.fit_transform(x)
+
+df_normalized = pd.DataFrame(x_scaled)
+df_normalized
+
+df['species'].unique()
+
+label_encoder = preprocessing.LabelEncoder()
+df['species'] = label_encoder.fit_transform(df['species'])
+
+df['species'].unique()
+
+features_df = df.drop(columns=['species'])
+
+enc = preprocessing.OneHotEncoder()
+enc_df=pd.DataFrame(enc.fit_transform(df[['species']]).toarray())
+
+df_encode = features_df.join(enc_df)
+df_encode
+
+df_encode.rename(columns = {0:'Iris-Setosa',
+1:'Iris-Versicolor',2:'Iris-virginica'}, inplace = True)
+
+df_encode
+
+from sklearn import preprocessing
+df['species'].unique()
+
+one_hot_df = pd.get_dummies(df, prefix="Species",
+columns=['species'], drop_first=True)
+
+one_hot_df
+
+=========================================DW2==============================================
+import pandas as pd
+import numpy as np
+df=pd.read_csv("/home/gescoe/Desktop/DSBDA_25B/StudentsPerformanceTest1(1).csv")
+df
+df.isnull()
+series = pd.isnull(df["math score"])
+df[series]
+series1 = pd.notnull(df["math score"])
+df[series1]
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+df['gender'] = le.fit_transform(df["gender"])
+newdf=df
+df
+missing_values = ["Na","na"]
+df = pd.read_csv("StudentsPerformanceTest1(1).csv", na_values = missing_values)
+df
+ndf = df
+ndf.fillna(0)
+m_v = df['math score'].mean()
+df['math score'].fillna(value = m_v, inplace=True)
+df
+me_v = df['reading score'].median()
+df['reading score'].fillna(value = me_v, inplace=True)
+df
+std_v = df['writing score'].std()
+df['writing score'].fillna(value  = std_v, inplace=True)
+df
+min_v = df['Placement Score'].min()
+df['Placement Score'].fillna(value  = min_v, inplace=True)
+df
+max_v = df['placement offer count'].max()
+df['placement offer count'].fillna(value  = max_v, inplace=True)
+df
+import pandas as pd
+import numpy as np
+df = pd.read_csv("/home/gescoe/Desktop/DSBDA_25B/demo1.csv")
+df
+pip install seaborn
+import seaborn as sns
+import pandas as pd
+import numpy as np
+df = pd.read_csv("/home/gescoe/Desktop/DSBDA_25B/demo1.csv")
+df
+col = ['math score', 'reading score', 'writing score', 'placement score']
+df.boxplot(col)
+import matplotlib.pyplot as plt
+df = pd.read_csv("/home/gescoe/Desktop/DSBDA_25B/demo1.csv")
+fig, ax = plt.subplots(figsize = (18,10))
+ax.scatter(df['placement score'], df['placement offer count'])
+plt.show()
+import matplotlib.pyplot as plt
+df['math score'].plot(kind = 'hist')
+df['log_math'] = np.log10(df['math score'])
+df['log_math'].plot(kind='hist')
+
+================================DW3==================================================================
+import pandas as pd
+import numpy as np
+df = pd.read_csv("./Mall_Customers.csv")
+df
+df.mean()
+df.loc[:,'Age'].mean()
+df.loc[:,'CustomerID'].mean()
+df.mean(axis=1) [0:4]
+df.median()
+df.median(axis=1) [0:4]
+df.loc[:,'CustomerID'].median()
+df.mode()
+df.loc[:,'CustomerID'].mode()
+df.loc[:,'Age'].mode()
+df.max()
+df.loc[:,'Age'].max(skipna = False)
+df.min()
+df.loc[:,'Age'].min(skipna = False)
+df.std()
+df.loc[:,'Age'].std()
+df.loc[:,'Annual Income (k$)'].std()
+df.std(axis=1)[0:4]
+df
+df.groupby(['Genre']) ['Age'].mean()
+df_u=df.rename(columns= {'Annual Income k$)':'Income'},inplace=False)
+
+from sklearn import preprocessing
+enc = preprocessing.OneHotEncoder()
+enc_df = pd.DataFrame(enc.fit_transform(df[['Genre']]).toarray())
+enc_df
+df_encode =df_u.join(enc_df)
+df_encode
+iris=pd.read_csv("./IRIS.csv")
+iris
+irisSet = (iris['species']== 'Iris-setosa')
+print('Iris-setosa')
+print(iris[irisSet].describe())
+irisVer = (iris['species']== 'Iris-versicolor')
+print('Iris-versicolor')
+print(iris[irisVer].describe())
+irisVir = (iris['species']== 'Iris-virginica')
+print(iris[irisVir].describe())
+print('Iris-virginica')
+print(iris[irisVir].describe())
+
+======================================DA1======================================================
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+x=np.array([95,85,80,70,60])
+y=np.array([85,95,70,65,70])
+model=np.polyfit(x,y,1)
+predict=np.poly1d(model)
+predict(65)
+y_pred=predict(x)
+y_pred
+from sklearn.metrics import r2_score
+r2_score(y,y_pred)
+y_line = model[1] + model[0]* x
+plt.plot(x, y_line, c = 'r')
+plt.scatter(x, y_pred)
+plt.scatter(x,y,c='r')
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing
+housing=fetch_california_housing()
+data=pd.DataFrame(housing.data)
+data.columns=housing.feature_names
+data.head()
+data['PRICE']=housing.target
+data.isnull().sum()
+x=data.drop(['PRICE'],axis=1)
+y=data['PRICE']
+from sklearn.model_selection import train_test_split
+xtrain,xtest,ytrain,ytest=train_test_split(x,y,test_size=0.2,random_state=0)
+import sklearn
+from sklearn.linear_model import LinearRegression
+lm=LinearRegression()
+model=lm.fit(xtrain,ytrain)
+ytrain_pred=lm.predict(xtrain)
+ytest_pred=lm.predict(xtest)
+df=pd.DataFrame(ytrain_pred,ytrain)
+df=pd.DataFrame(ytest_pred,ytest)
+from sklearn.metrics import mean_squared_error, r2_score
+mse=mean_squared_error(ytest,ytest_pred)
+print(mse)
+mse=mean_squared_error(ytrain_pred,ytrain)
+print(mse)
+plt.scatter(ytrain ,ytrain_pred,c='blue',marker='o',label='Training data')
+plt.scatter(ytest,ytest_pred ,c='lightgreen',marker='s',label='Test data')
+plt.xlabel('True values')
+plt.ylabel('Predicted')
+plt.title("True value vs Predicted value")
+plt.legend(loc= 'upper left')
+#plt.hlines(y=0,xmin=0,xmax=50)
+plt.plot()
+plt.show()
+
+======================================================DA2=======================================
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+
+# Load dataset
+df = pd.read_csv('data5.csv')
+
+# Drop 'Gender' column
+df1 = df.drop("Genre", axis=1)
+
+# Define features and target variable
+y = df1.iloc[:, -1].values  # Target variable
+X = df1.iloc[:, :-1].values  # Feature set
+
+# Split the data into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2)
+
+# Train Logistic Regression model
+LR = LogisticRegression()
+LR.fit(X_train, y_train)
+
+
+
+# Compute confusion matrix
+y_pred = LR.predict(X_test)
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+
+# Calculate metrics
+accuracy = (tn + tp) * 100 / (tp + tn + fp + fn)
+precision = tp / (tp + fp)
+recall = tp / (tp + fn)
+f1_score = (2 * precision * recall) / (precision + recall)
+specificity = tn / (tn + fp)
+
+# Display metrics
+print(f"Accuracy: {accuracy:.2f}%")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1 Score: {f1_score:.2f}")
+print(f"Specificity: {specificity:.2f}")
+
+# Take user input for feature values
+print("Enter values for the following features:")
+input_features = []
+for i in range(X_train.shape[1]):
+    val = float(input(f"Feature {i+1}: "))
+    input_features.append(val)
+
+# Convert input into numpy array and reshape
+input_array = np.array(input_features).reshape(1, -1)
+
+# Make prediction
+prediction = LR.predict(input_array)[0]
+print(f"Predicted Output: {prediction}")
+
+=====================================================DA3=========================================
+# Naive Bayes
+## Importing the libraries
+import numpy as np
+import pandas as pd
+## Importing the dataset
+dataset = pd.read_csv('data6.csv')
+dataset
+
+X = dataset.iloc[:, :-1].values
+y = dataset.iloc[:, -1].values
+## Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 2)
+
+## Training the Naive Bayes model on the Training set
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+## Predicting the Test set results
+y_pred = classifier.predict(X_test)
+y_pred
+# Evaluate the performance of Model for train_y and
+from sklearn.metrics import precision_score,confusion_matrix,accuracy_score,recall_score
+accuracy = accuracy_score(y_test,y_pred)
+precision =precision_score(y_test, y_pred,average='micro')
+recall = recall_score(y_test, y_pred,average='micro')
+print(f"Accuracy: {accuracy}")
+print(f"Precision: {precision}")
+print(f"Recall: {recall}")
+
+
+## Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+# Display the confusion matrix and evaluation metrics
+print("Confusion Matrix:")
+print(cm)
+
+# Predicting the result
+from sklearn.preprocessing import StandardScaler
+# Feature Scaling (assuming you want to scale your features)
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)  # Fit and transform the training set
+X_test = sc.transform(X_test)  # Only transform the test set
+
+# Accept user input for prediction
+age = float(input("Enter age: "))
+salary = float(input("Enter salary: "))
+
+# Scale the input before making the prediction
+scaled_input = sc.transform([[age, salary]])  # Scale the input values
+prediction = classifier.predict(scaled_input)  # Make the prediction
+
+print(f"The predicted class for age {age} and salary {salary} is: {prediction[0]}")
+
+
+===========================================TA===========================================================
+pip install nltk
+pip install --upgrade pip
+import nltk
+from nltk.tokenize import sent_tokenize
+nltk.download('punkt')
+text="""Hello Mr. Smith, how are you doing today ? The weather is great, and the city is awesome ! The sky is pinkish-blue. You shouldn't eat cardboard """
+tokenized_text=sent_tokenize(text)
+print(tokenized_text)
+from nltk.tokenize import word_tokenize
+tokenized_word=word_tokenize(text)
+print(tokenized_word)
+from nltk.probability import FreqDist
+fdist = FreqDist(tokenized_word)
+print(fdist)
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+stop_words=set(stopwords.words("english"))
+print(stop_words)
+filtered_sent=[]
+for w in tokenized_word:
+    if w not in stop_words:
+        filtered_sent.append(w)
+print("Tokenized Sentence:",tokenized_word)
+print("Filterd Sentence:",filtered_sent)
+
+from nltk.stem import PorterStemmer
+from nltk.tokenize import sent_tokenize, word_tokenize
+
+ps = PorterStemmer()
+
+stemmed_words=[]
+for w in filtered_sent:
+    stemmed_words.append(ps.stem(w))
+
+print("Filtered Sentence:",filtered_sent)
+print("Stemmed Sentence:",stemmed_words)
+from nltk.stem.wordnet import WordNetLemmatizer
+import nltk
+nltk.download('wordnet')
+lem = WordNetLemmatizer()
+
+from nltk.stem.porter import PorterStemmer
+stem = PorterStemmer()
+
+word = "flying"
+print("Lemmatized Word:",lem.lemmatize(word,"v"))
+print("Stemmed Word:",stem.stem(word))
+sent = "Albert Einstein was born in Ulm, Germany in 1879."
+tokens=nltk.word_tokenize(sent)
+print(tokens)
+
+import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.pos_tag(tokens)
+
+import nltk
+import pandas as pd
+data=pd.read_csv('/home/gescoe/Desktop/TEB30/train.tsv' , sep='\t')
+data.head()
+data.info()
+data.Sentiment.value_counts()
+import matplotlib.pyplot as plt
+Sentiment_count=data.groupby('Sentiment').count()
+plt.bar(Sentiment_count.index.values, Sentiment_count['Phrase'])
+plt.xlabel('Review Sentiments')
+plt.ylabel('Number of Review')
+plt.show()
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.tokenize import RegexpTokenizer
+token = RegexpTokenizer(r'[a-zA-Z0-9]+')
+cv = CountVectorizer(lowercase=True,stop_words='english',ngram_range = (1,1),tokenizer = token.tokenize)
+text_counts= cv.fit_transform(data['Phrase'])
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    text_counts, data['Sentiment'], test_size=0.3, random_state=1)
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+clf = MultinomialNB().fit(X_train, y_train)
+predicted= clf.predict(X_test)
+print("MultinomialNB Accuracy:",metrics.accuracy_score(y_test, predicted))
+from sklearn.feature_extraction.text import TfidfVectorizer
+tf=TfidfVectorizer()
+text_tf= tf.fit_transform(data['Phrase'])
+print(text_tf)
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    text_tf, data['Sentiment'], test_size=0.3, random_state=123)
+
+#Model generation
+from sklearn.naive_bayes import MultinomialNB
+from sklearn import metrics
+clf = MultinomialNB().fit(X_train, y_train)
+predicted= clf.predict(X_test)
+print("MultinomialNB Accuracy:",metrics.accuracy_score(y_test, predicted))
+
+===============================================DV1===============================================================
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset=pd.read_csv('/content/train.csv')
+dataset
+
+dataset.info()
+dataset.describe()
+dataset.dtypes
+
+dataset.isnull().sum()
+dataset=pd.read_csv('/content/train.csv')
+dataset.info()
+dataset
+sns.distplot(dataset['Fare'])
+The Dist Plot
+sns.distplot(dataset['Fare'], kde=False)
+
+
+sns.distplot(dataset['Fare'], kde=False, bins=10)
+sns.jointplot(x='Age', y='Fare', data=dataset)
+sns.pairplot(dataset)
+sns.rugplot(dataset['Fare'])
+sns.barplot(x='Sex', y='Fare', data=dataset)
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.barplot(x='Sex', y='Age', data=dataset, estimator=np.std)
+sns.countplot(x='Fare', data=dataset)
+sns.boxplot(x='Sex', y='Age', data=dataset)
+sns.boxplot(x='Survived', y='Fare', data=dataset)
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+sns.violinplot(x='Sex', y='Age', data=dataset, hue='Survived')
+sns.stripplot(x='Sex', y='Age', data=dataset)
+sns.histplot(data=dataset,x='Fare',y='Survived')
+
+==================================================DV2============================================================
+
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset=pd.read_csv('/content/train.csv')
+
+dataset.head()
+sns.boxplot(x='Sex', y='Age', data=dataset)
+
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from seaborn import load_dataset
+
+data = pd.read_csv('/content/train.csv')
+
+tips = load_dataset("tips")
+sns.boxplot(x='Survived', y='Fare', data=dataset)
+sns.boxplot(x='Sex', y='Age', data=dataset)
+sns.boxplot(x='Sex', y='Age', data=dataset)
+sns.boxplot(x='Survived', y='Fare', data=dataset)
+
+===============================================DV3====================================================================
+import numpy as np
+import pandas as pd
+df = pd.read_csv("data10.csv")
+df.columns = ["col1","col2","col3","col4","col5"]
+df.head()
+column = len(list(df))
+column
+df.info()
+np.unique(df["col5"])
+df.describe()
+
+import seaborn as sns
+import matplotlib
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+fig, axes = plt.subplots(2, 2, figsize=(16, 8))
+axes[0,0].set_title("Distribution of First Column")
+axes[0,0].hist(df["col1"]);
+axes[0,1].set_title("Distribution of Second Column")
+axes[0,1].hist(df["col2"]);
+axes[1,0].set_title("Distribution of Third Column")
+axes[1,0].hist(df["col3"]);
+axes[1,1].set_title("Distribution of Fourth Column")
+axes[1,1].hist(df["col4"]);
+data_to_plot = [df["col1"],df["col2"],df["col3"],df["col4"]]
+
+sns.set_style("whitegrid")
+fig = plt.figure(1, figsize=(12,8))
+ax = fig.add_subplot(111)
+bp = ax.boxplot(data_to_plot)
+
+sns.boxplot(x='col1', y='col2', data=df)
+sns.boxplot(x='col3', y='col4', data=df)
