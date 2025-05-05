@@ -12,9 +12,9 @@ df.describe()
 
 
 
-from sklearn import preprocessing
+from sklearn import preprocessing        #This is used to convert categorical values (like ‘Genre’) into a binary (0/1) format.
 enc = preprocessing.OneHotEncoder()
-enc_df = pd.DataFrame(enc.fit_transform(df[['Genre']]).toarray())
+enc_df = pd.DataFrame(enc.fit_transform(df[['Genre']]).toarray()) #Converts the encoded result (sparse matrix) into a full DataFrame enc_df.
 enc_df
 
 df1 = df.join(enc_df)
