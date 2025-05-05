@@ -7,8 +7,8 @@ from sklearn.metrics import mean_squared_error, r2_score # These are metrics fro
 
 # Load Boston housing dataset
 data = pd.read_csv('data4.csv')
-X = data.iloc[:, 1].values.reshape(-1, 1)  # Reshape X to 2D
-y = data.iloc[:, -1].values
+X = data.iloc[:, 1].values.reshape(-1, 1) #Selects all rows(:)and second column We use .values to convert this into a NumPy array and  reshape 2D array
+y = data.iloc[:, -1].values               #Selects all rows (:) and the last column as the target variable (price of houses).
 
 # Split data into training and testing sets
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2)
