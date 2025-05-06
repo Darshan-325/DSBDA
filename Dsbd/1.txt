@@ -1,85 +1,38 @@
-import pandas as pd
 import numpy as np
+import pandas as pd 
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
 
-df = pd.read_csv("data1.csv")
+# Load dataset
+data = pd.read_csv('data4.csv')
 
-df
+# Features and target
+X = data.iloc[:, :-1].values  # all columns except last
+y = data.iloc[:, -1].values   # last column (price)
 
-df.dtypes
+# Split data
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2)
 
-df.info
+# Train model
+model = LinearRegression()
+model.fit(x_train, y_train)
 
-df.describe()
+# Predict
+y_pred = model.predict(x_test)
 
-df.isnull()
+# Evaluation
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+r2 = r2_score(y_test, y_pred)
 
-df.shape
+print(f'Intercept: {model.intercept_}')
+print(f'Coefficient: {model.coef_}')
+print(f'MSE: {mse}')
+print(f'RMSE: {rmse}')
+print(f'R²: {r2}')
 
-df.size
-
-df.index
-
-df.head()
-
-df.tail
-
-df.tail(n=5)
-
-df.columns
-
-df.columns.values
-
-df.index
-
-df.sort_index(axis=1,ascending=True)
-
-df.iloc[5]
-
-df[0:3]
-
-df.iloc[:,:]
-
-df.iloc[:8,:2]
-
-df.iloc[:,3]
-
-df.iloc[3:5,0:2]
-
-df.iloc[1,1]
-
-df['sepal_length']
-
-df['sepal_length'].iloc[5]
-
-cols_2_4=df.columns[2:4]
-df[cols_2_4]
-
-df[df.columns[2:4]].iloc[5:10]
-
-
-
-
-from sklearn import preprocessing
-min_max_scaler = preprocessing.MinMaxScaler()
-
-
-x=df.iloc[:,:4]
-
-x_scaled = min_max_scaler.fit_transform(x)
-
-df_normalized = pd.DataFrame(x_scaled)
-
-df_normalized 
-
-
-
-
-
-df['species'].unique()
-
-label_encoder = preprocessing.LabelEncoder()
-
-df['species']= label_encoder.fit_transform(df['species'])
-
-df['species'].unique()
-
+# Predicting area from user input price (only if simple linear regression)
+user_price = float(input("Enter the house price: "))
+predicted_area = (user_price - model.intercept_) / model.coef_[0]
+print(f'Predicted area: {predicted_area}')
